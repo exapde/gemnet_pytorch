@@ -104,7 +104,7 @@ class SphericalBasisLayer(torch.nn.Module):
         modules = {"sin": torch.sin, "cos": torch.cos, "sqrt": torch.sqrt}
         m = 0  # only single angle
         for l in range(len(Y_lm)):  # num_spherical
-            if l == 0: 
+            if l == 0:
                 # Y_00 is only a constant -> function returns value and not tensor
                 first_sph = sym.lambdify([theta], Y_lm[l][m], modules)
                 self.sph_funcs.append(
@@ -151,7 +151,7 @@ class SphericalBasisLayer(torch.nn.Module):
 
             # Zero padded dense matrix
             # maximum number of neighbors, catch empty id_reduce_ji with maximum
-            Kmax = 0 if sph.shape[0]==0 else torch.max(torch.max(Kidx + 1), torch.tensor(0))  
+            Kmax = 0 if sph.shape[0]==0 else torch.max(torch.max(Kidx + 1), torch.tensor(0))
             nEdges = d_scaled.shape[0]
 
             sph2 = torch.zeros(
@@ -235,7 +235,7 @@ class TensorBasisLayer(torch.nn.Module):
 
         self.register_buffer(
             "degreeInOrder", torch.arange(num_spherical) * 2 + 1, persistent=False
-        ) 
+        )
 
     def forward(self, D_ca, Alpha_cab, Theta_cabd, id4_reduce_ca, Kidx):
 
@@ -284,11 +284,7 @@ class TensorBasisLayer(torch.nn.Module):
 
             # Zero padded dense matrix
             # maximum number of neighbors, catch empty id_reduce_ji with maximum
-            #Kmax = if sph.shape[0]==0 else torch.max(torch.max(Kidx + 1), torch.tensor(0))  
-            if sph.shape[0]==0:
-                Kmax = 1
-            else:
-                Kmax = torch.max(torch.max(Kidx + 1), torch.tensor(0))     
+            Kmax = 0 if sph.shape[0]==0 else torch.max(torch.max(Kidx + 1), torch.tensor(0))
             nEdges = d_scaled.shape[0]
 
             sph2 = torch.zeros(

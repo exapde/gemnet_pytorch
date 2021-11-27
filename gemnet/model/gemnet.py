@@ -381,7 +381,7 @@ class GemNet(torch.nn.Module):
             angle_cabd: Tensor, shape = (nQuadruplets,)
                 Angle between atoms c <- a-b -> d.
         """
-        # ---------------------------------- a - b <- d ---------------------------------- #
+        # ---------------------------------- a -> b <- d ---------------------------------- #
         Ra = R[id4_int_a[id4_expand_intm_ab]]  # a       (intmTriplets,3)
         Rb = R[id4_int_b[id4_expand_intm_ab]]  # b       (intmTriplets,3)
         # Rb = R[id_a[id4_expand_intm_db]      # d       (intmTriplets,3)

@@ -38,7 +38,7 @@ class AtomUpdateBlock(torch.nn.Module):
         self.name = name
         self.emb_size_edge = emb_size_edge
 
-        self.dense_rbf = Dense(emb_size_rbf, emb_size_edge, activation=None, bias=False)
+        self.dense_rbf = Dense(emb_size_rbf, emb_size_edge, activation=None, bias=False) # only linear transformation
         self.scale_sum = ScalingFactor(scale_file=scale_file, name=name + "_sum")
 
         self.layers = self.get_mlp(emb_size_atom, nHidden, activation)
@@ -59,12 +59,14 @@ class AtomUpdateBlock(torch.nn.Module):
             h: Tensor, shape=(nAtoms, emb_size_atom)
                 Atom embedding.
         """
-        nAtoms = h.shape[0]
+        nAtoms = h.shape[0] 
 
+        # Apply linear transformation to rbf
         mlp_rbf = self.dense_rbf(rbf)  # (nEdges, emb_size_edge)
+        # Apply geometric message passing
         x = m * mlp_rbf
 
-        x2 = scatter(x, id_j, dim=0, dim_size=nAtoms, reduce="add")  
+        x2 = scatter(x, id_j, dim=0, dim_size=nAtoms, reduce="add")  # torch scatter
         x = self.scale_sum(m, x2) # (nAtoms, emb_size_edge)
 
         for i, layer in enumerate(self.layers):

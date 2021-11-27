@@ -284,7 +284,11 @@ class TensorBasisLayer(torch.nn.Module):
 
             # Zero padded dense matrix
             # maximum number of neighbors, catch empty id_reduce_ji with maximum
-            Kmax = if sph.shape[0]==0 else torch.max(torch.max(Kidx + 1), torch.tensor(0))  
+            #Kmax = if sph.shape[0]==0 else torch.max(torch.max(Kidx + 1), torch.tensor(0))  
+            if sph.shape[0]==0:
+                Kmax = 1
+            else:
+                Kmax = torch.max(torch.max(Kidx + 1), torch.tensor(0))     
             nEdges = d_scaled.shape[0]
 
             sph2 = torch.zeros(

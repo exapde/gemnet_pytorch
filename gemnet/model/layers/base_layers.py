@@ -21,10 +21,10 @@ class Dense(torch.nn.Module):
     ):
         super().__init__()
 
-        self.linear = torch.nn.Linear(in_features, out_features, bias=bias)
-        self.reset_parameters()
-        self.weight = self.linear.weight
-        self.bias = self.linear.bias
+        self.linear = torch.nn.Linear(in_features, out_features, bias=bias) # create instance of linear transformation
+        self.reset_parameters() # initialize weights
+        self.weight = self.linear.weight # transfer weights to self object
+        self.bias = self.linear.bias # transfer bias to self object
 
         if isinstance(activation, str):
             activation = activation.lower()
